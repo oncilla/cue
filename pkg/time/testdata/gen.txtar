@@ -6,13 +6,25 @@ import "time"
 t1: time.Time & "1937-01-01T12:00:27.87+00:20"
 t2: time.Time & "no time"
 t3: time.Unix(1500000000, 123456)
+t4: time.ToUnix("2017-07-14T02:40:00.000123456Z")
+t5: time.ToUnix("07-14-2017T02:40:00.000123456Z")
+t6: time.ToUnixNano("2017-07-14T02:40:00.000123456Z")
+t7: time.ToUnixNano("07-14-2017T02:40:00.000123456Z")
 -- out/time --
 Errors:
 t2: invalid value "no time" (does not satisfy time.Time): error in call to time.Time: invalid time "no time":
     ./in.cue:4:17
+error in call to time.ToUnix: invalid time "07-14-2017T02:40:00.000123456Z":
+    ./in.cue:7:5
+error in call to time.ToUnixNano: invalid time "07-14-2017T02:40:00.000123456Z":
+    ./in.cue:9:5
 
 Result:
 t1: "1937-01-01T12:00:27.87+00:20"
 t2: _|_ // t2: invalid value "no time" (does not satisfy time.Time): error in call to time.Time: invalid time "no time"
 t3: "2017-07-14T02:40:00.000123456Z"
+t4: 1500000000
+t5: _|_ // error in call to time.ToUnix: invalid time "07-14-2017T02:40:00.000123456Z"
+t6: 1500000000000123456
+t7: _|_ // error in call to time.ToUnixNano: invalid time "07-14-2017T02:40:00.000123456Z"
 

@@ -201,3 +201,38 @@ func Unix(sec int64, nsec int64) string {
 	t := time.Unix(sec, nsec)
 	return t.UTC().Format(time.RFC3339Nano)
 }
+
+// Unix returns t as a Unix time, the number of seconds elapsed since January 1,
+// 1970 UTC. The result does not depend on the location associated with t.
+// Unix-like operating systems often record time as a 32-bit count of seconds,
+// but since the method here returns a 64-bit value it is valid for billions of
+// years into the past or future.
+
+// ToUnix returns the provided RFC3339 time-date as a Unix time, the number of
+// seconds elapsed since January 1, 1970 UTC.
+func ToUnix(value string) (int64, error) {
+	t, err := parse(value)
+	if err != nil {
+		return 0, err
+	}
+	return t.Unix(), nil
+}
+
+// ToUnix returns the provided RFC3339 time-date as a Unix time, the number of
+// nanoseconds elapsed since January 1, 1970 UTC. The result is undefined if the
+// Unix time in nanoseconds cannot be represented by an int64 (a date before the
+// year 1678 or after 2262).
+func ToUnixNano(value string) (int64, error) {
+	t, err := parse(value)
+	if err != nil {
+		return 0, err
+	}
+	return t.UnixNano(), nil
+}
+
+func parse(value string) (time.Time, error) {
+	if _, err := Time(value); err != nil {
+		return time.Time{}, err
+	}
+	return time.Parse(time.RFC3339Nano, value)
+}

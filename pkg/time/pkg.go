@@ -206,5 +206,29 @@ var pkg = &internal.Package{
 				c.Ret = Unix(sec, nsec)
 			}
 		},
+	}, {
+		Name: "ToUnix",
+		Params: []internal.Param{
+			{Kind: adt.StringKind},
+		},
+		Result: adt.IntKind,
+		Func: func(c *internal.CallCtxt) {
+			value := c.String(0)
+			if c.Do() {
+				c.Ret, c.Err = ToUnix(value)
+			}
+		},
+	}, {
+		Name: "ToUnixNano",
+		Params: []internal.Param{
+			{Kind: adt.StringKind},
+		},
+		Result: adt.IntKind,
+		Func: func(c *internal.CallCtxt) {
+			value := c.String(0)
+			if c.Do() {
+				c.Ret, c.Err = ToUnixNano(value)
+			}
+		},
 	}},
 }
